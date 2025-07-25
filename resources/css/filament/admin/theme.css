@@ -1,5 +1,5 @@
 @import '@filament/index.css';
 
 .fi-sidebar {
-    @apply bg-webco-primary text-white;
+  @apply bg-blue-500;
 }

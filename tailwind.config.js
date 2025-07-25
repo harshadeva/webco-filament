@@ -7,12 +7,7 @@ module.exports = {
         './vendor/filament/**/*.blade.php',
     ],
     theme: {
-        extend: {
-            colors: {
-                'webco-primary': '#32475a',
-                'webco-secondary': '#f09c37',
-            },
-        },
+        extend: {},
     },
     plugins: [],
 };
