@@ -2,27 +2,21 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ProductColorResource\Pages;
-use App\Filament\Resources\ProductColorResource\RelationManagers;
-use App\Models\ProductColor;
-use Filament\Tables\Actions\ActionGroup;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\ViewAction;
-use Filament\Forms;
-use Filament\Forms\Components\ColorPicker;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\TextInput;
+use Filament\Tables;
 use Filament\Forms\Form;
+use Filament\Tables\Table;
+use App\Models\ProductColor;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\Alignment;
-use Filament\Tables;
-use Filament\Tables\Columns\ColorColumn;
+use Filament\Forms\Components\Section;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Columns\ColorColumn;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Forms\Components\ColorPicker;
+use App\Filament\Resources\ProductColorResource\Pages;
 
 class ProductColorResource extends Resource
 {

@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources\ProductColorResource\Pages;
 
-use App\Filament\Resources\ProductColorResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use App\Filament\Resources\ProductColorResource;
 
 class ListProductColors extends ListRecords
 {
