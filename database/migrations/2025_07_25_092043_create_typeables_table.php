@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('typeables', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('product_type_id')->constrained('product_types')->onDelete('restrict');
             $table->morphs('typeable');
             $table->timestamps();
         });
