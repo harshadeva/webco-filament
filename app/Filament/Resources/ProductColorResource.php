@@ -5,7 +5,15 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ProductColorResource\Pages;
 use App\Filament\Resources\ProductColorResource\RelationManagers;
 use App\Models\ProductColor;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Forms;
+use Filament\Forms\Components\ColorPicker;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\Alignment;
@@ -26,7 +34,13 @@ class ProductColorResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Section::make()
+                    ->schema([
+                        TextInput::make('name')->required(),
+                        ColorPicker::make('hex_code')->required()
+                            ->label('Hex Code')
+                            ->default('#000000'),
+                    ])->columnSpan(1),
             ]);
     }
 
@@ -48,20 +62,24 @@ class ProductColorResource extends Resource
                 ColorColumn::make('hex_code_color')
                     ->label('Color')
                     ->toggleable()
-                      ->alignment(Alignment::Center)
+                    ->alignment(Alignment::Center)
                     ->getStateUsing(fn(ProductColor $record): string => $record->hex_code)
-                    ->tooltip(fn (ProductColor $record): string => "Created At :  {$record->created_at->format('F j, Y, g:i a')}"),
+                    ->tooltip(fn(ProductColor $record): string => "Created At :  {$record->created_at->format('F j, Y, g:i a')}"),
             ])
             ->filters([])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                ActionGroup::make([
+                    EditAction::make(),
+                    DeleteAction::make(),
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])->searchPlaceholder('Search (Name)')
-             ->defaultSort('created_at', 'desc');
+            ->defaultSort('created_at', 'desc')
+            ->recordUrl(null);
     }
 
     public static function getRelations(): array
