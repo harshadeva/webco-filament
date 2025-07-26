@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProductResource\Pages;
 use App\Filament\Resources\ProductResource\RelationManagers;
+use App\Jobs\UpdateProductDescription;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductType;
@@ -24,8 +25,10 @@ use Filament\Infolists\Components\Split;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\ViewEntry;
 use Filament\Infolists\Infolist;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\Action as ActionsAction;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
@@ -190,6 +193,16 @@ class ProductResource extends Resource
                 ActionGroup::make([
                     EditAction::make(),
                     ViewAction::make(),
+                    ActionsAction::make('updateDescription')
+                    ->label('Update via Queue')
+                    ->icon('heroicon-o-arrow-path')
+                    ->action(function (Product $record) {
+                        UpdateProductDescription::dispatch($record);
+                        Notification::make()
+                        ->title('Job Dispatched')
+                        ->success()
+                        ->send();
+                    }),
                     DeleteAction::make(),
                 ]),
             ])
