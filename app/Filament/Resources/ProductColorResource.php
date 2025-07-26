@@ -17,12 +17,15 @@ use Filament\Tables\Columns\ColorColumn;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Forms\Components\ColorPicker;
 use App\Filament\Resources\ProductColorResource\Pages;
+use Illuminate\Database\Eloquent\Collection;
 
 class ProductColorResource extends Resource
 {
     protected static ?string $model = ProductColor::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-paint-brush';
+
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
@@ -52,6 +55,15 @@ class ProductColorResource extends Resource
                     ->sortable()
                     ->toggleable(),
 
+                TextColumn::make('products_count')
+                    ->label('Products Count')
+                    ->badge()
+                    ->alignment(Alignment::Center)
+                    ->color(fn($state) => $state == 0 ? 'gray' : 'primary')
+                    ->counts('products')
+                    ->toggleable()
+                    ->sortable(),
+
                 ColorColumn::make('color_code_color')
                     ->label('Color')
                     ->toggleable()
@@ -63,12 +75,43 @@ class ProductColorResource extends Resource
             ->actions([
                 ActionGroup::make([
                     EditAction::make()->color('primary'),
-                    DeleteAction::make()->color('primary'),
+                    DeleteAction::make()->disabled(
+                        fn(ProductColor $record) =>
+                        $record->products()->exists()
+                    )
+                        ->color(
+                            fn(ProductColor $record) =>
+                            $record->products()->exists()
+                                ? 'gray'
+                                : 'danger'
+                        ),
                 ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()->action(function (Collection $records) {
+                        $nonDeletables = $records->filter(function ($record) {
+                            return $record->products()->exists();
+                        });
+
+                        if ($nonDeletables->isNotEmpty()) {
+                            \Filament\Notifications\Notification::make()
+                                ->title('Some records cannot be deleted')
+                                ->body('One or more selected Product Colors are associated with products.')
+                                ->danger()
+                                ->persistent()
+                                ->send();
+
+                            return;
+                        }
+
+                        $records->each->delete();
+
+                        \Filament\Notifications\Notification::make()
+                            ->title('Records deleted successfully.')
+                            ->success()
+                            ->send();
+                    }),
                 ]),
             ])->searchPlaceholder('Search (Name)')
             ->defaultSort('created_at', 'desc')

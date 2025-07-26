@@ -23,9 +23,4 @@ class ProductType extends Model
     {
         return $this->morphedByMany(ProductCategory::class, 'typeable');
     }
-
-    public function colors(): BelongsToMany
-    {
-        return $this->morphedByMany(ProductColor::class, 'typeable');
-    }
 }

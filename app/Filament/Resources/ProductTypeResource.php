@@ -10,16 +10,22 @@ use Filament\Forms;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\Alignment;
 use Filament\Support\Exceptions\Halt;
 use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Log;
 
@@ -28,6 +34,8 @@ class ProductTypeResource extends Resource
     protected static ?string $model = ProductType::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-group';
+
+    protected static ?int $navigationSort = 4;
 
     public static function form(Form $form): Form
     {
@@ -73,6 +81,22 @@ class ProductTypeResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')->searchable()->sortable()->toggleable(),
+                TextColumn::make('products_count')
+                    ->label('Products Count')
+                    ->badge()
+                    ->alignment(Alignment::Center)
+                    ->color(fn($state) => $state == 0 ? 'gray' : 'primary')
+                    ->counts('products')
+                    ->toggleable()
+                    ->sortable(),
+                TextColumn::make('categories_count')
+                    ->label('Categories Count')
+                    ->badge()
+                    ->alignment(Alignment::Center)
+                    ->color(fn($state) => $state == 0 ? 'gray' : 'primary')
+                    ->counts('categories')
+                    ->toggleable()
+                    ->sortable(),
                 TextColumn::make('unique_identifier')->label('API Unique Key')->copyable()
                     ->copyMessage('API Unique Key copied to clipboard')->searchable()->sortable()->toggleable(),
             ])
@@ -82,18 +106,17 @@ class ProductTypeResource extends Resource
             ->actions([
                 ActionGroup::make([
                     EditAction::make()->color('primary'),
+                    ViewAction::make()->color('primary'),
                     DeleteAction::make()
                         ->disabled(
                             fn(ProductType $record) =>
                             $record->products()->exists() ||
-                                $record->categories()->exists() ||
-                                $record->colors()->exists()
+                                $record->categories()->exists()
                         )
                         ->color(
                             fn(ProductType $record) =>
                             $record->products()->exists() ||
-                                $record->categories()->exists() ||
-                                $record->colors()->exists()
+                                $record->categories()->exists()
                                 ? 'gray'
                                 : 'danger'
                         )
@@ -101,11 +124,63 @@ class ProductTypeResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()->action(function (Collection $records) {
+                        $nonDeletables = $records->filter(function ($record) {
+                            return $record->products()->exists()
+                                || $record->categories()->exists();
+                        });
+
+                        if ($nonDeletables->isNotEmpty()) {
+                            \Filament\Notifications\Notification::make()
+                                ->title('Some records cannot be deleted')
+                                ->body('One or more selected Product Types are associated with products or categories.')
+                                ->danger()
+                                ->persistent()
+                                ->send();
+
+                            return;
+                        }
+
+                        $records->each->delete();
+
+                        \Filament\Notifications\Notification::make()
+                            ->title('Records deleted successfully.')
+                            ->success()
+                            ->send();
+                    }),
                 ]),
             ])->searchPlaceholder('Search (Name, Unique Key)')
             ->defaultSort('created_at', 'desc')
             ->recordUrl(null);
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Section::make('Product Type Details')
+                    ->schema([
+                        TextEntry::make('name')
+                            ->label('Type Name')
+                            ->weight('bold'),
+                        TextEntry::make('unique_identifier')
+                            ->label('API Unique Identifier')
+                            ->copyable()
+                            ->copyMessage('API Unique Key copied to clipboard'),
+                        TextEntry::make('products_count')
+                            ->label('Products Count')
+                            ->formatStateUsing(fn($record) => $record->products()->count())
+                            ->badge()
+                            ->color(fn($state) => $state == 0 ? 'gray' : 'primary'),
+                        TextEntry::make('categories_count')
+                            ->label('Categories Count')
+                            ->formatStateUsing(fn($record) => $record->categories()->count())
+                            ->badge()
+                            ->color(fn($state) => $state == 0 ? 'gray' : 'primary'),
+                    ])
+                    ->collapsible()
+                    ->columns(2),
+            ]);
     }
 
     public static function getRelations(): array
