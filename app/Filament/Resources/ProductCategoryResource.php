@@ -35,6 +35,17 @@ class ProductCategoryResource extends Resource
 
     protected static ?int $navigationSort = 2;
 
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return static::getModel()::count() > 0 ? 'primary' : 'info';
+    }
+
+
     public static function form(Form $form): Form
     {
         return $form
@@ -95,9 +106,9 @@ class ProductCategoryResource extends Resource
                     EditAction::make()->color('primary'),
                     ViewAction::make()->color('primary'),
                     DeleteAction::make()->disabled(
-                            fn(ProductCategory $record) =>
-                            $record->products()->exists()
-                        )
+                        fn(ProductCategory $record) =>
+                        $record->products()->exists()
+                    )
                         ->color(
                             fn(ProductCategory $record) =>
                             $record->products()->exists()
@@ -149,7 +160,7 @@ class ProductCategoryResource extends Resource
                             ->weight('bold'),
                         TextEntry::make('description')->placeholder('No description.'),
                         TextEntry::make('external_url')
-                             ->visible(fn($record) => !empty($record->external_url))
+                            ->visible(fn($record) => !empty($record->external_url))
                             ->label('External URL')
                             ->formatStateUsing(
                                 fn($state) => $state
