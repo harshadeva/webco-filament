@@ -19,8 +19,8 @@ class VocusApiService
     protected function login(): void
     {
         $response = Http::post($this->baseUrl . 'login', [
-            'email' => 'project-test@projecttest.com.au',
-            'password' => 'oxhyV9NzkZ^02MEB',
+            'email' => config('project.vocus_username'),
+            'password' => config('project.vocus_password'),
         ])->throw()->json();
 
         if (!isset($response['success']) || $response['success'] !== true) {
