@@ -4,8 +4,8 @@ namespace App\Filament\Widgets;
 
 use App\Models\Product;
 use App\Models\ProductCategory;
-use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 
 class StatsOverview extends BaseWidget
 {
@@ -14,7 +14,7 @@ class StatsOverview extends BaseWidget
 
     protected function getStats(): array
     {
-       return [
+        return [
             Stat::make('Total Products', Product::count())
                 ->description('All products in the system')
                 ->color('primary')

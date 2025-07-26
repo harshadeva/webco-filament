@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Typeable extends Model
 {
@@ -11,7 +12,7 @@ class Typeable extends Model
         'typeable_type',
     ];
 
-    public function typeable()
+    public function typeable(): MorphTo
     {
         return $this->morphTo();
     }
