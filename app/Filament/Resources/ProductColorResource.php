@@ -44,7 +44,6 @@ class ProductColorResource extends Resource
                 TextColumn::make('name')
                     ->toggleable()
                     ->sortable()
-                    ->unique(ignoreRecord: true)
                     ->searchable(),
 
 
