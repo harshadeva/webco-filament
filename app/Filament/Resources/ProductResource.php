@@ -34,6 +34,7 @@ use Filament\Forms\Components\Actions\Action;
 use App\Filament\Resources\ProductResource\Pages;
 use Filament\Tables\Actions\Action as ActionsAction;
 use Filament\Infolists\Components\Section as ComponentsSection;
+use Illuminate\Support\Facades\Auth;
 
 class ProductResource extends Resource
 {
@@ -203,7 +204,7 @@ class ProductResource extends Resource
                         ->label('Update via Queue')
                         ->icon('heroicon-o-arrow-path')
                         ->action(function (Product $record) {
-                            UpdateProductDescription::dispatch($record);
+                            UpdateProductDescription::dispatch($record,Auth::user());
                             Notification::make()
                                 ->title('Job Dispatched')
                                 ->success()
