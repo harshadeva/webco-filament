@@ -22,6 +22,7 @@ use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\Section as ComponentsSection;
 use Filament\Infolists\Components\Split;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\ViewEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -252,6 +253,11 @@ class ProductResource extends Resource
                     ])
                     ->columns(2)
                     ->collapsible(),
+                    ComponentsSection::make('Custom Status Bar')
+                     ->schema([
+                         ViewEntry::make('custom_status_bar')
+                ->view('filament.infolists.components.status-bar'),
+                     ])
             ]);
     }
 
