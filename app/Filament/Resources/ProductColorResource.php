@@ -16,8 +16,8 @@ use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\ColorColumn;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Forms\Components\ColorPicker;
-use App\Filament\Resources\ProductColorResource\Pages;
 use Illuminate\Database\Eloquent\Collection;
+use App\Filament\Resources\ProductColorResource\Pages;
 
 class ProductColorResource extends Resource
 {

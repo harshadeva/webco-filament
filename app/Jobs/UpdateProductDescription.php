@@ -3,8 +3,8 @@
 namespace App\Jobs;
 
 use App\Models\Product;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class UpdateProductDescription implements ShouldQueue
 {
@@ -19,6 +19,6 @@ class UpdateProductDescription implements ShouldQueue
 
     public function handle(): void
     {
-        $this->product->update(['description' => $this->product->description . ' [Updated by Job]'. ' at ' . now()]);
+        $this->product->update(['description' => $this->product->description . ' [Updated by Job]' . ' at ' . now()]);
     }
 }

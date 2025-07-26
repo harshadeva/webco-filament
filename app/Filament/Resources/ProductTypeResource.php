@@ -2,32 +2,26 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ProductTypeResource\Pages;
-use App\Filament\Resources\ProductTypeResource\RelationManagers;
-use App\Models\ProductType;
-use App\Services\VocusApiService;
-use Filament\Forms;
-use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
-use Filament\Infolists\Components\Section;
-use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Infolist;
-use Filament\Notifications\Notification;
-use Filament\Resources\Resource;
-use Filament\Support\Enums\Alignment;
-use Filament\Support\Exceptions\Halt;
 use Filament\Tables;
-use Filament\Tables\Actions\ActionGroup;
-use Filament\Tables\Actions\DeleteAction;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
+use App\Models\ProductType;
+use Filament\Infolists\Infolist;
+use Filament\Resources\Resource;
+use App\Services\VocusApiService;
+use Filament\Support\Enums\Alignment;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\TextEntry;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Facades\Log;
+use Filament\Forms\Components\Actions\Action;
+use App\Filament\Resources\ProductTypeResource\Pages;
 
 class ProductTypeResource extends Resource
 {
