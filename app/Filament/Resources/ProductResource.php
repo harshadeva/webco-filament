@@ -18,6 +18,11 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\IconEntry;
+use Filament\Infolists\Components\Section as ComponentsSection;
+use Filament\Infolists\Components\Split;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
@@ -172,13 +177,13 @@ class ProductResource extends Resource
             ])
             ->filters([
                 SelectFilter::make('status')
-                ->label('Status')
-                ->options([
-                    '1' => 'Active',
-                    '0' => 'Inactive',
-                ])
-                ->native(false)
-                ->default(null)
+                    ->label('Status')
+                    ->options([
+                        '1' => 'Active',
+                        '0' => 'Inactive',
+                    ])
+                    ->native(false)
+                    ->default(null)
             ])
             ->actions([
                 ActionGroup::make([
@@ -194,6 +199,60 @@ class ProductResource extends Resource
             ])->searchPlaceholder('Search (Product Name, Category)')
             ->defaultSort('created_at', 'desc')
             ->recordUrl(null);
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                ComponentsSection::make('Product Overview')
+                    ->schema([
+                        Split::make([
+                            TextEntry::make('name')
+                                ->label('Product Name')
+                                ->weight('bold')
+                                ->size('lg')
+                                ->color('primary'),
+                            IconEntry::make('status')
+                                ->label('Status')
+                                ->boolean()
+                                ->icon(fn($state) => $state ? 'heroicon-o-check-circle' : 'heroicon-o-x-circle')
+                                ->color(fn($state) => $state ? 'success' : 'danger'),
+                        ])->from('md'),
+                        TextEntry::make('description')
+                            ->label('Description')
+                            ->columnSpanFull()
+                            ->markdown()
+                            ->prose(),
+                    ])
+                    ->collapsible()
+                    ->columns(1),
+                ComponentsSection::make('Product Details')
+                    ->schema([
+                        TextEntry::make('productCategory.name')
+                            ->label('Category')
+                            ->badge()
+                            ->color('info'),
+
+                        TextEntry::make('productTypes.name')
+                            ->label('Product Types')
+                            ->listWithLineBreaks()
+                            ->badge()
+                            ->color('success'),
+
+                        TextEntry::make('productColor.color_code')
+                            ->label('Color')
+                            ->formatStateUsing(fn($state) => "<span class='inline-block w-6 h-6 rounded border-none' style='background-color: $state;'></span>")
+                            ->html(),
+
+                        TextEntry::make('created_at')
+                            ->label('Created At')
+                            ->dateTime('d M Y')
+                            ->badge(),
+                    ])
+                    ->columns(2)
+                    ->collapsible(),
+            ]);
     }
 
     public static function getRelations(): array
