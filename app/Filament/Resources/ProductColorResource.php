@@ -62,8 +62,8 @@ class ProductColorResource extends Resource
             ->filters([])
             ->actions([
                 ActionGroup::make([
-                    EditAction::make(),
-                    DeleteAction::make(),
+                    EditAction::make()->color('primary'),
+                    DeleteAction::make()->color('primary'),
                 ]),
             ])
             ->bulkActions([

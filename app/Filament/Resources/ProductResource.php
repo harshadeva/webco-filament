@@ -195,9 +195,9 @@ class ProductResource extends Resource
             ])
             ->actions([
                 ActionGroup::make([
-                    EditAction::make(),
-                    ViewAction::make(),
-                    ActionsAction::make('updateDescription')
+                    EditAction::make()->color('primary'),
+                    ViewAction::make()->color('primary'),
+                    ActionsAction::make('updateDescription')->color('primary')
                         ->label('Update via Queue')
                         ->icon('heroicon-o-arrow-path')
                         ->action(function (Product $record) {
