@@ -30,10 +30,9 @@ class ProductColorResource extends Resource
             ->schema([
                 Section::make()
                     ->schema([
-                        TextInput::make('name')->required(),
-                        ColorPicker::make('hex_code')->required()
-                            ->label('Hex Code')
-                            ->default('#000000'),
+                        TextInput::make('name')->required()->maxLength(255),
+                        ColorPicker::make('color_code')->required()->rgba()
+                            ->label('Color Code'),
                     ])->columnSpan(1),
             ]);
     }
@@ -45,19 +44,20 @@ class ProductColorResource extends Resource
                 TextColumn::make('name')
                     ->toggleable()
                     ->sortable()
+                    ->unique(ignoreRecord: true)
                     ->searchable(),
 
 
-                TextColumn::make('hex_code')
-                    ->label('Hex Code')
+                TextColumn::make('color_code')
+                    ->label('Color Code')
                     ->sortable()
                     ->toggleable(),
 
-                ColorColumn::make('hex_code_color')
+                ColorColumn::make('color_code_color')
                     ->label('Color')
                     ->toggleable()
                     ->alignment(Alignment::Center)
-                    ->getStateUsing(fn(ProductColor $record): string => $record->hex_code)
+                    ->getStateUsing(fn(ProductColor $record): string => $record->color_code)
                     ->tooltip(fn(ProductColor $record): string => "Created At :  {$record->created_at->format('F j, Y, g:i a')}"),
             ])
             ->filters([])

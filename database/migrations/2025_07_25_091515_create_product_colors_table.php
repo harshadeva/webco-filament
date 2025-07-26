@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('product_colors', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('hex_code');
+            $table->string('color_code');
             $table->timestamps();
         });
     }

@@ -22,6 +22,8 @@ class ProductFactory extends Factory
            'product_category_id' => ProductCategory::factory(),
             'product_color_id' => ProductColor::factory(),
             'name' => $this->faker->words(2, true),
+            'slug' => $this->faker->slug(),
+            'description' => $this->faker->paragraph(),
             'address' => $this->faker->optional()->address(),
             'status' => $this->faker->numberBetween(0, 1),
             'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),

@@ -14,14 +14,13 @@ class ProductColorSeeder extends Seeder
     public function run(): void
     {
         $colors = [
-            ['name' => 'Red', 'hex_code' => '#FF0000'],
-            ['name' => 'Green', 'hex_code' => '#00FF00'],
-            ['name' => 'Blue', 'hex_code' => '#0000FF'],
-            ['name' => 'Yellow', 'hex_code' => '#FFFF00'],
-            ['name' => 'Cyan', 'hex_code' => '#00FFFF'],
-            ['name' => 'Magenta', 'hex_code' => '#FF00FF'],
+            ['name' => 'Red',     'color_code' => 'rgba(255, 0, 0, 1.0)'],
+            ['name' => 'Green',   'color_code' => 'rgba(0, 255, 0, 1.0)'],
+            ['name' => 'Blue',    'color_code' => 'rgba(0, 0, 255, 1.0)'],
+            ['name' => 'Yellow',  'color_code' => 'rgba(255, 255, 0, 1.0)'],
+            ['name' => 'Cyan',    'color_code' => 'rgba(0, 255, 255, 1.0)'],
+            ['name' => 'Magenta', 'color_code' => 'rgba(255, 0, 255, 1.0)'],
         ];
-
         foreach ($colors as $color) {
             ProductColor::create($color);
         }

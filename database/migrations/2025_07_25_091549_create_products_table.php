@@ -16,7 +16,8 @@ return new class extends Migration
             $table->foreignId('product_category_id')->constrained('product_categories')->onDelete('restrict');
             $table->foreignId('product_color_id')->constrained('product_colors')->onDelete('restrict');
             $table->string('name');
-            $table->text('address')->nullable();
+            $table->text('slug')->unique();
+            $table->text('description')->nullable();
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });

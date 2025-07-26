@@ -18,7 +18,7 @@ class ProductColorFactory extends Factory
     {
         return [
            'name' => $this->faker->colorName(),
-            'hex_code' => $this->faker->hexColor(),
+            'color_code' => $this->faker->rgbaCssColor(),
             'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
             'updated_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
         ];
