@@ -47,6 +47,16 @@ class ProductResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return static::getModel()::count() > 0 ? 'primary' : 'info';
+    }
+
     public static function form(Form $form): Form
     {
         return $form->schema([
@@ -194,15 +204,15 @@ class ProductResource extends Resource
                     EditAction::make(),
                     ViewAction::make(),
                     ActionsAction::make('updateDescription')
-                    ->label('Update via Queue')
-                    ->icon('heroicon-o-arrow-path')
-                    ->action(function (Product $record) {
-                        UpdateProductDescription::dispatch($record);
-                        Notification::make()
-                        ->title('Job Dispatched')
-                        ->success()
-                        ->send();
-                    }),
+                        ->label('Update via Queue')
+                        ->icon('heroicon-o-arrow-path')
+                        ->action(function (Product $record) {
+                            UpdateProductDescription::dispatch($record);
+                            Notification::make()
+                                ->title('Job Dispatched')
+                                ->success()
+                                ->send();
+                        }),
                     DeleteAction::make(),
                 ]),
             ])
@@ -266,11 +276,11 @@ class ProductResource extends Resource
                     ])
                     ->columns(2)
                     ->collapsible(),
-                    ComponentsSection::make('Custom Status Bar')
-                     ->schema([
-                         ViewEntry::make('custom_status_bar')
-                ->view('filament.infolists.components.status-bar'),
-                     ])
+                ComponentsSection::make('Custom Status Bar')
+                    ->schema([
+                        ViewEntry::make('custom_status_bar')
+                            ->view('filament.infolists.components.status-bar'),
+                    ])
             ]);
     }
 
