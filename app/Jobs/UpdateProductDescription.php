@@ -2,12 +2,11 @@
 
 namespace App\Jobs;
 
-use App\Models\Product;
 use App\Models\User;
+use App\Models\Product;
 use Filament\Notifications\Notification;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Facades\Auth;
 
 class UpdateProductDescription implements ShouldQueue
 {
@@ -16,7 +15,7 @@ class UpdateProductDescription implements ShouldQueue
     protected Product $product;
     protected User $user;
 
-    public function __construct(Product $product,User $user)
+    public function __construct(Product $product, User $user)
     {
         $this->product = $product;
         $this->user = $user;
